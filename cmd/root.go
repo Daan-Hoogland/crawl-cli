@@ -5,6 +5,7 @@ import (
 	"os"
 
 	internal "github.com/daan-hoogland/crawl/internal"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -18,6 +19,7 @@ or size and will report any findings back to the web application.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		// initialize logging before every single command
 		internal.InitLog()
+		log.Debugln(cmd)
 	},
 }
 
