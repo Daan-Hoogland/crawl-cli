@@ -9,15 +9,17 @@ import (
 var scanCmd = &cobra.Command{
 	Use:   "scan",
 	Short: "The scan command scans the filesystem for files or running services.",
-	Long: `A Fast and Flexible Static Site Generator built with
-                love by spf13 and friends in Go.
-				Complete documentation is available at http://hugo.spf13.com`,
+	Long: `The scan commands scans the filesystem for files or running applications
+and compares them to the given input. Any matches will be sent
+to the connected web application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		logrus.Info("Executing scan command")
 	},
 }
 
+// init sets the flags for scanCmd and adds it as a subcommand
+// of the root command.
 func init() {
-	internal.FileFlags(scanCmd)
+	internal.InitFlags(scanCmd)
 	rootCmd.AddCommand(scanCmd)
 }
