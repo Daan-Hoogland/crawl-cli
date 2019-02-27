@@ -20,7 +20,7 @@ var (
 	// Size of the file to search for.
 	Size int
 
-	// Hash algorithm type
+	// Algorithm used to get the hash value
 	Algorithm string
 )
 
