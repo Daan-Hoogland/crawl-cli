@@ -11,7 +11,7 @@ var (
 	// Port number the web service is reachable at.
 	Port int
 
-	// Names of the files/directories to search for.
+	// Name of the files/directories to search for.
 	Name []string
 
 	// Hash of the file to search for.
