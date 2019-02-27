@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	internal "github.com/daan-hoogland/crawl/internal"
 	"github.com/spf13/cobra"
 )
 
@@ -14,10 +15,15 @@ var rootCmd = &cobra.Command{
 	Long: `A tool to be combined with the web application with the same name.
 The application searches for a file or directory with a name, hash
 or size and will report any findings back to the web application.`,
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		// initialize logging before every single command
+		internal.InitLog()
+	},
 }
 
 // Execute initializes the Cobra commands.
 func Execute() {
+	internal.InitFlags(rootCmd)
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)

@@ -2,7 +2,7 @@ package cmd
 
 import (
 	internal "github.com/daan-hoogland/crawl/internal"
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -13,7 +13,7 @@ var analyseCmd = &cobra.Command{
 Unlike the scan command, the analyse command does not send the results
 to a running web application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		logrus.Info("Executing analyse command")
+		log.Debug("Executing analyse command")
 	},
 }
 
