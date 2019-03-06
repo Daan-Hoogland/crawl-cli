@@ -36,10 +36,12 @@ func validateScan() error {
 	isHashEmpty := isEmpty(internal.Hash)
 	isAlgorithmEmpty := isEmpty(internal.Algorithm)
 
-	return errors.New("Error: required flag(s) \"name\", \"size\", \"hash\" or \"algorithm\" not set")
+	isHashFlagsInvalid := (!isHashEmpty && isAlgorithmEmpty) || (isHashEmpty && !isAlgorithmEmpty)
 
-	log.WithFields(log.Fields{"name": isNameEmpty, "size": isSizeZero, "hash": isHashEmpty, "algorithm": isAlgorithmEmpty}).Errorln("Invalid flags for scan")
-	log.WithFields(internal.LogFields()).Debugln("Debug flags")
+	if isNameEmpty && isSizeZero && isHashFlagsInvalid {
+		return errors.New("Error: one of the following flags is required: \"name\", \"size\" or \"hash\" and \"algorithm\"")
+	}
+
 	return nil
 }
 

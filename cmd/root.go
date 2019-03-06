@@ -6,7 +6,7 @@ import (
 
 	internal "github.com/daan-hoogland/crawl/internal"
 	validate "github.com/daan-hoogland/crawl/internal/validation"
-	log "github.com/sirupsen/logrus"
+
 	"github.com/spf13/cobra"
 )
 
@@ -23,8 +23,8 @@ or size and will report any findings back to the web application.`,
 		error := validate.CheckRequiredFlags(cmd)
 		if (error) != nil {
 			fmt.Println(error)
-			log.Debugln(error)
 			cmd.Usage()
+			os.Exit(1)
 		}
 	},
 }

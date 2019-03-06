@@ -53,7 +53,7 @@ func fileFlags(c *cobra.Command) {
 	c.Flags().StringVarP(&Algorithm, "algorithm", "a", "", "the hash algorithm used")
 	c.Flags().IntVarP(&Size, "size", "s", 0, "file size that the target file must match")
 	c.Flags().StringSliceVarP(&Name, "name", "n", nil, "name(s) of files to search for")
-	c.Flags().StringVarP(&Hash, "directory", "d", "", "directory the application starts in")
+	c.Flags().StringVarP(&Directory, "directory", "d", "", "directory the application starts in")
 	c.MarkFlagRequired("directory")
 }
 
