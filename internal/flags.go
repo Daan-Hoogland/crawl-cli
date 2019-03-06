@@ -11,6 +11,9 @@ var (
 	// Port number the web service is reachable at.
 	Port int
 
+	// Directory in which the application starts.
+	Directory string
+
 	// Name of the files/directories to search for.
 	Name []string
 
@@ -46,16 +49,18 @@ func portFlag(c *cobra.Command) {
 // fileFlags sets all the flags to a command that are in the file category
 // (name, size, hash, algorithm)
 func fileFlags(c *cobra.Command) {
-	c.Flags().StringVar(&Hash, "hash", "", "hash of the file to search for")
-	c.Flags().StringVarP(&Algorithm, "algorithm", "a", "md5", "the hash algorithm used")
+	c.Flags().StringVarP(&Hash, "hash", "H", "", "hash of the file to search for")
+	c.Flags().StringVarP(&Algorithm, "algorithm", "a", "", "the hash algorithm used")
 	c.Flags().IntVarP(&Size, "size", "s", 0, "file size that the target file must match")
 	c.Flags().StringSliceVarP(&Name, "name", "n", nil, "name(s) of files to search for")
+	c.Flags().StringVarP(&Hash, "directory", "d", "", "directory the application starts in")
+	c.MarkFlagRequired("directory")
 }
 
 // rootFlags sets the flags for the root command. These are available on every other command.
 func rootFlags(c *cobra.Command) {
 	c.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose level of the logger")
-	c.PersistentFlags().BoolVar(&Debug, "debug", false, "turn debug mode on or off")
+	c.PersistentFlags().BoolVarP(&Debug, "debug", "D", false, "turn debug mode on or off")
 	c.PersistentFlags().StringVarP(&LogFile, "log", "l", "", "file that the log will be written to")
 }
 
