@@ -8,12 +8,13 @@ import (
 
 // InitLog initializes the log interface with the correct logging level.
 func InitLog(cmd *cobra.Command) {
-	if Verbose {
-		log.SetLevel(log.InfoLevel)
-	} else if Debug {
+	if Debug {
 		log.SetLevel(log.DebugLevel)
 	} else if Develop {
 		log.SetLevel(log.TraceLevel)
+	} else if Verbose || cmd.Name() == "connect" {
+		//force log level to info when command connect is used to display success messages.
+		log.SetLevel(log.InfoLevel)
 	} else {
 		log.SetLevel(log.WarnLevel)
 	}
