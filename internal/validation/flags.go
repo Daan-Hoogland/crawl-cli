@@ -2,6 +2,7 @@ package validation
 
 import (
 	"errors"
+	"net"
 
 	internal "github.com/daan-hoogland/crawl/internal"
 	lgr "github.com/sirupsen/logrus"
@@ -56,14 +57,19 @@ func validateScan() error {
 }
 
 func validateAnalyse() error {
-	log.Errorln("Invalid flags for analyse")
-	log.WithFields(internal.LogFields()).Debugln("Debug flags")
+	log.Traceln("entering validateAnalysis")
+	log.Traceln("leaving validateAnalysis")
 	return nil
 }
 
 func validateConnect() error {
-	log.Errorln("Invalid flags for connect")
-	log.WithFields(internal.LogFields()).Debugln("Debug flags")
+	log.Traceln("entering validateConnect")
+
+	if nil == net.ParseIP(internal.External) {
+		log.Traceln("leaving validateConnect with error")
+		return errors.New("Error: flag \"external\" does not compile to a valid IP address")
+	}
+	log.Traceln("leaving validateConnect")
 	return nil
 }
 
