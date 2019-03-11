@@ -34,6 +34,9 @@ var (
 
 	//Debug mode.
 	Debug bool
+
+	//Developer mode
+	Develop bool
 )
 
 // externalFlag sets the external flag on the given command.
@@ -61,6 +64,7 @@ func fileFlags(c *cobra.Command) {
 func rootFlags(c *cobra.Command) {
 	c.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose level of the logger")
 	c.PersistentFlags().BoolVarP(&Debug, "debug", "D", false, "turn debug mode on or off")
+	c.PersistentFlags().BoolVar(&Develop, "dev", false, "turn trace mode on or off")
 	c.PersistentFlags().StringVarP(&LogFile, "log", "l", "", "file that the log will be written to")
 }
 

@@ -1,6 +1,7 @@
 package internal
 
 import (
+	nested "github.com/antonfisher/nested-logrus-formatter"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -10,10 +11,16 @@ func InitLog() {
 		log.SetLevel(log.InfoLevel)
 	} else if Debug {
 		log.SetLevel(log.DebugLevel)
+	} else if Develop {
+		log.SetLevel(log.TraceLevel)
 	} else {
 		log.SetLevel(log.WarnLevel)
-
 	}
+
+	log.SetFormatter(&nested.Formatter{
+		HideKeys:    true,
+		FieldsOrder: []string{"component", "category", "subcategory"},
+	})
 }
 
 // LogFields returns a Fields object to log the flag fields.
