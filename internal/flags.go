@@ -41,7 +41,7 @@ var (
 
 // externalFlag sets the external flag on the given command.
 func externalFlag(c *cobra.Command) {
-	c.Flags().StringVarP(&External, "target", "t", "127.0.0.1", "external address pointing to web service")
+	c.Flags().StringVarP(&External, "target", "t", "127.0.0.1", "external ipv4 address pointing to web service")
 }
 
 // portFlag sets the port flag on the given command.

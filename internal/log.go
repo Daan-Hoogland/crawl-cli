@@ -3,10 +3,11 @@ package internal
 import (
 	nested "github.com/antonfisher/nested-logrus-formatter"
 	log "github.com/sirupsen/logrus"
+	"github.com/spf13/cobra"
 )
 
 // InitLog initializes the log interface with the correct logging level.
-func InitLog() {
+func InitLog(cmd *cobra.Command) {
 	if Verbose {
 		log.SetLevel(log.InfoLevel)
 	} else if Debug {
@@ -19,7 +20,7 @@ func InitLog() {
 
 	log.SetFormatter(&nested.Formatter{
 		HideKeys:    true,
-		FieldsOrder: []string{"component", "category", "subcategory"},
+		FieldsOrder: []string{"command", "component", "category", "subcategory"},
 	})
 }
 

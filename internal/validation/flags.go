@@ -25,8 +25,25 @@ func CheckRequiredFlags(cmd *cobra.Command) error {
 	}
 }
 
+//validateScan validates the flags for the scan command.
 func validateScan() error {
 	log.Traceln("entering validateScan")
+
+	analyse := validateAnalyse()
+	connect := validateConnect()
+
+	if nil != analyse {
+		log.Traceln("leaving validateScan with analyse")
+		return analyse
+	} else {
+		log.Traceln("leaving validateScan with connect")
+		return connect
+	}
+}
+
+//validateAnalyse validates the flags for the analyse command.
+func validateAnalyse() error {
+	log.Traceln("entering validateAnalysis")
 	isNameEmpty := false
 	if len(internal.Name) == 0 {
 		isNameEmpty = true
@@ -51,31 +68,26 @@ func validateScan() error {
 		log.Traceln("leaving validateScan with error")
 		return errors.New("Error: one of the following flags is required: \"name\", \"size\" or \"hash\" and \"algorithm\"")
 	}
-
-	log.Traceln("leaving validateScan")
-	return nil
-}
-
-func validateAnalyse() error {
-	log.Traceln("entering validateAnalysis")
 	log.Traceln("leaving validateAnalysis")
 	return nil
 }
 
+//validateConnect validates the flags for the connect command.
 func validateConnect() error {
 	log.Traceln("entering validateConnect")
 
 	if nil == net.ParseIP(internal.External) {
 		log.Traceln("leaving validateConnect with error")
-		return errors.New("Error: flag \"external\" does not compile to a valid IP address")
+		return errors.New("Error: flag \"target\" does not compile to a valid IP address")
 	}
 	log.Traceln("leaving validateConnect")
 	return nil
 }
 
+//isNotEmpty checks if one or multiple string values are empty
 func isNotEmpty(ss ...string) bool {
 	for _, s := range ss {
-		if s != "" && len(s) > 0 {
+		if s != "" {
 			return false
 		}
 	}

@@ -19,7 +19,7 @@ The application searches for a file or directory with a name, hash
 or size and will report any findings back to the web application.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		// initialize logging before every single command
-		internal.InitLog()
+		internal.InitLog(cmd)
 		error := validate.CheckRequiredFlags(cmd)
 		if (error) != nil {
 			fmt.Println(error)
