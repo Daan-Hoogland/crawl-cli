@@ -13,10 +13,10 @@ import (
 //File struct to handle simple file information easily.
 //Maybe move this to a seperate file/package?
 type File struct {
-	name string
-	path string
-	size int64
-	mode os.FileMode
+	Name string
+	Path string
+	Size int64
+	Mode os.FileMode
 }
 
 //AppFs filesystem for application
@@ -33,18 +33,18 @@ func WalkDirectory(dir string) ([]File, []File, error) {
 		if info.IsDir() {
 			directories = append(directories,
 				File{
-					name: filepath.Base(info.Name()),
-					path: path,
-					size: info.Size(),
-					mode: info.Mode(),
+					Name: filepath.Base(info.Name()),
+					Path: path,
+					Size: info.Size(),
+					Mode: info.Mode(),
 				})
 		} else {
 			files = append(files,
 				File{
-					name: filepath.Base(info.Name()),
-					path: path,
-					size: info.Size(),
-					mode: info.Mode(),
+					Name: filepath.Base(info.Name()),
+					Path: path,
+					Size: info.Size(),
+					Mode: info.Mode(),
 				})
 		}
 

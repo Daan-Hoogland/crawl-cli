@@ -13,8 +13,18 @@ var analyseCmd = &cobra.Command{
 Unlike the scan command, the analyse command does not send the results
 to a running web application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		log.Debug("Executing analyse command")
+		log.WithField("command", "analyse")
+		log.Tracef("executing analyse command")
 	},
+}
+
+func contains(s []string, e string) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
 }
 
 // init sets the flags for analyseCmd and adds it as a subcommand

@@ -12,8 +12,7 @@ func InitLog(cmd *cobra.Command) {
 		log.SetLevel(log.DebugLevel)
 	} else if Develop {
 		log.SetLevel(log.TraceLevel)
-	} else if Verbose || cmd.Name() == "connect" {
-		//force log level to info when command connect is used to display success messages.
+	} else if Verbose {
 		log.SetLevel(log.InfoLevel)
 	} else {
 		log.SetLevel(log.WarnLevel)

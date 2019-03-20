@@ -16,7 +16,6 @@ to the connected web application.`,
 	SuggestFor: []string{"start"},
 	Run: func(cmd *cobra.Command, args []string) {
 		log.WithField("command", "scan")
-		log.WithFields(log.Fields{"Directory": internal.Directory}).Debugln("Directory in run")
 		files, directories, err := pkg.WalkDirectory(internal.Directory)
 		log.WithFields(log.Fields{"a": len(files), "b": len(directories), "c": err}).Debugln("Finished walkdirectory")
 	},

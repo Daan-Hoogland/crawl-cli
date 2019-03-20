@@ -16,16 +16,17 @@ var connectCmd = &cobra.Command{
 	Long: `The connect commands tests the connection between the application
 and the web application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		log.WithField("command", "scan")
-		log.Traceln("Executing connect command")
+		log.WithField("command", "connect")
+		log.Traceln("executing connect command")
 		url := pkg.GenerateURL(internal.External, internal.Port, nil, false, "status", "connection")
 		log.WithField("category", "url").Debugln(url)
 		resp, err := http.Get(url)
 		if err != nil {
-			log.WithFields(log.Fields{"category": "status", "subcategory": "http"}).Warnln("error during connection")
+			println("Error during connection")
+			log.WithFields(log.Fields{"category": "status", "subcategory": "http"}).Debugln("error during connection")
 			log.WithFields(log.Fields{"category": "status", "subcategory": "http"}).Errorln(err)
 		} else {
-			log.WithFields(log.Fields{"category": "status", "subcategory": "http"}).Infoln("successful connection")
+			println("Successful connection")
 			log.WithFields(log.Fields{"category": "status", "subcategory": "http"}).Infoln(resp.Status)
 		}
 	},
