@@ -17,11 +17,14 @@ var (
 	// Name of the files/directories to search for.
 	Name []string
 
+	// Regex the name has to match.
+	Regex []string
+
 	// Hash of the file to search for.
 	Hash string
 
 	// Size of the file to search for.
-	Size int
+	Size int64
 
 	// Algorithm used to get the hash value.
 	Algorithm string

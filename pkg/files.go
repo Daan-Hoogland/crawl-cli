@@ -3,7 +3,6 @@ package pkg
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 
 	log "github.com/sirupsen/logrus"
 
@@ -22,37 +21,29 @@ type File struct {
 //AppFs filesystem for application
 var AppFs = afero.NewOsFs()
 
+var jobs = make(chan string)
+
 //WalkDirectory walks over a directory and returns a File struct array for files
 //and directories found.
-func WalkDirectory(dir string) ([]File, []File, error) {
+func WalkDirectory(dir string) {
 	log.WithField("Directory", dir).Debugln("inside walkdirectory")
-	afs := &afero.Afero{Fs: AppFs}
-	var files []File
-	var directories []File
-	err := afs.Walk(dir, func(path string, info os.FileInfo, err error) error {
-		if info.IsDir() {
-			directories = append(directories,
-				File{
-					Name: filepath.Base(info.Name()),
-					Path: path,
-					Size: info.Size(),
-					Mode: info.Mode(),
-				})
-		} else {
-			files = append(files,
-				File{
-					Name: filepath.Base(info.Name()),
-					Path: path,
-					Size: info.Size(),
-					Mode: info.Mode(),
-				})
-		}
 
-		return nil
-	})
-
-	return files, directories, err
 }
+
+func scanDirectory(path string) ([]os.FileInfo, error) {
+	fs, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	// files and directories found in directory
+	fileInfo, err := fs.Readdir(-1)
+
+	//todo: analyse the files
+
+
+}
+
+
 
 //diskUsage returns disk usage of a given path.
 func diskUsage(currentPath string, info os.FileInfo) int64 {
