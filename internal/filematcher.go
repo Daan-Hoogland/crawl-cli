@@ -7,15 +7,24 @@ import (
 	"crypto/sha512"
 	"hash"
 	"io"
-	"log"
 	"os"
 	"regexp"
 
+	log "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/sha3"
 )
 
+//Result object contains results of match checks.
+type Result struct {
+	Name  bool
+	Regex bool
+	Size  bool
+	Hash  bool
+}
+
 // MatchFile attempts to match a file according to the values given in program args.
-func MatchFile(file os.FileInfo, path string) bool {
+func MatchFile(file os.FileInfo, path string) Result {
+	// log.WithField("component", path).Debugln("")
 	regexMatch := false
 	for _, regex := range Regex {
 		r, _ := regexp.Compile(regex)
@@ -53,7 +62,12 @@ func MatchFile(file os.FileInfo, path string) bool {
 	// but is coming through the writer interface
 	hashMatch := bytes.Equal(hasher.Sum(nil), []byte(Hash))
 
-	return false
+	return Result{
+		Name:  nameMatch,
+		Regex: regexMatch,
+		Size:  sizeMatch,
+		Hash:  hashMatch,
+	}
 }
 
 //getHasher returns a new hash.Hash object depending on input string given.
@@ -84,4 +98,37 @@ func getHasher(algorithm string) hash.Hash {
 	default:
 		return sha256.New()
 	}
+}
+
+func ValidateResult(res Result) bool {
+	match := false
+	if len(Name) > 0 {
+		match = res.Name
+	}
+
+	if len(Regex) > 0 {
+		if !match {
+			match = res.Regex
+		} else {
+			match = match && res.Regex
+		}
+	}
+
+	if Size > 0 {
+		if !match {
+			match = res.Size
+		} else {
+			match = match && res.Size
+		}
+	}
+
+	if len(Hash) > 0 {
+		if !match {
+			match = res.Hash
+		} else {
+			match = match && res.Hash
+		}
+	}
+
+	return match
 }

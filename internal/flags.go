@@ -38,8 +38,11 @@ var (
 	//Debug mode.
 	Debug bool
 
-	//Developer mode
+	//Develop mode
 	Develop bool
+
+	//MaxProcs number of processor cores to use
+	MaxProcs int
 )
 
 // externalFlag sets the external flag on the given command.
@@ -57,7 +60,7 @@ func portFlag(c *cobra.Command) {
 func fileFlags(c *cobra.Command) {
 	c.Flags().StringVarP(&Hash, "hash", "H", "", "hash of the file to search for")
 	c.Flags().StringVarP(&Algorithm, "algorithm", "a", "", "the hash algorithm used")
-	c.Flags().IntVarP(&Size, "size", "s", 0, "file size that the target file must match")
+	c.Flags().Int64VarP(&Size, "size", "s", 0, "file size that the target file must match")
 	c.Flags().StringSliceVarP(&Name, "name", "n", nil, "name(s) of files to search for")
 	c.Flags().StringVarP(&Directory, "directory", "d", "", "directory the application starts in")
 	c.MarkFlagRequired("directory")
@@ -69,6 +72,7 @@ func rootFlags(c *cobra.Command) {
 	c.PersistentFlags().BoolVarP(&Debug, "debug", "D", false, "turn debug mode on or off")
 	c.PersistentFlags().BoolVar(&Develop, "dev", false, "turn trace mode on or off")
 	c.PersistentFlags().StringVarP(&LogFile, "log", "l", "", "file that the log will be written to")
+	c.PersistentFlags().IntVarP(&MaxProcs, "cores", "c", 2, "number of processes to spawn. equal to cores.")
 }
 
 // InitFlags sets the flags on the connectCmd.

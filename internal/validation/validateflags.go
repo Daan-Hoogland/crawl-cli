@@ -3,6 +3,7 @@ package validation
 import (
 	"errors"
 	"net"
+	"regexp"
 
 	internal "github.com/daan-hoogland/crawl/internal"
 	lgr "github.com/sirupsen/logrus"
@@ -35,10 +36,11 @@ func validateScan() error {
 	if nil != analyse {
 		log.Traceln("leaving validateScan with analyse")
 		return analyse
-	} else {
-		log.Traceln("leaving validateScan with connect")
-		return connect
 	}
+
+	log.Traceln("leaving validateScan with connect")
+	return connect
+
 }
 
 //validateAnalyse validates the flags for the analyse command.
@@ -49,6 +51,15 @@ func validateAnalyse() error {
 		isNameEmpty = true
 	}
 	log.WithFields(lgr.Fields{"category": "name", "state": isNameEmpty}).Debugln("name check")
+
+	if len(internal.Regex) > 0 {
+		for _, v := range internal.Regex {
+			_, err := regexp.Compile(v)
+			if err != nil {
+				log.WithFields(lgr.Fields{"category": "regex", "state": v}).Fatalln("unable to compile regex")
+			}
+		}
+	}
 
 	isSizeZero := false
 	if internal.Size == 0 {
