@@ -21,10 +21,11 @@ and the web application.`,
 		url := pkg.GenerateURL(internal.External, internal.Port, nil, false, "status", "connection")
 		log.WithField("category", "url").Debugln(url)
 		resp, err := http.Get(url)
-		if err != nil {
+		if err != nil || resp.StatusCode != 200 {
 			println("Error during connection")
 			log.WithFields(log.Fields{"category": "status", "subcategory": "http"}).Debugln("error during connection")
 			log.WithFields(log.Fields{"category": "status", "subcategory": "http"}).Errorln(err)
+			log.WithFields(log.Fields{"category": "status", "subcategory": "http"}).Infoln(resp.Status)
 		} else {
 			println("Successful connection")
 			log.WithFields(log.Fields{"category": "status", "subcategory": "http"}).Infoln(resp.Status)
