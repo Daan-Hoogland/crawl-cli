@@ -7,9 +7,12 @@ import (
 	"sync"
 	"time"
 
+	log "github.com/sirupsen/logrus"
+
 	"github.com/daan-hoogland/walk"
 )
 
+//File struct used to store file information.
 type File struct {
 	info os.FileInfo
 	path string
@@ -22,15 +25,17 @@ type resultList struct {
 }
 
 var (
-	wg      sync.WaitGroup
+	wg sync.WaitGroup
+	//Results is a thread safe list containing results of the scanner action.
 	Results resultList
 
 	fileQueue = make(chan File, 300)
 )
 
+//StartJobs starts the consumers and producer.
 func StartJobs() {
 	// log.WithField("component", "producer").Traceln("entering start jobs")
-	consumers := MaxProcs - 1
+	consumers := MaxProcs - int(math.Ceil(0.2*float64(MaxProcs)))
 	if !(consumers-1 > 0) {
 		consumers = 1
 	}
