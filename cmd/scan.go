@@ -2,7 +2,6 @@ package cmd
 
 import (
 	internal "github.com/daan-hoogland/crawl/internal"
-	"github.com/daan-hoogland/crawl/pkg"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -16,8 +15,8 @@ to the connected web application.`,
 	SuggestFor: []string{"start"},
 	Run: func(cmd *cobra.Command, args []string) {
 		log.WithField("command", "scan")
-		files, directories, err := pkg.WalkDirectory(internal.Directory)
-		log.WithFields(log.Fields{"a": len(files), "b": len(directories), "c": err}).Debugln("Finished walkdirectory")
+		// files, directories, err := pkg.WalkDirectory(internal.Directory)
+		// log.WithFields(log.Fields{"a": len(files), "b": len(directories), "c": err}).Debugln("Finished walkdirectory")
 	},
 }
 

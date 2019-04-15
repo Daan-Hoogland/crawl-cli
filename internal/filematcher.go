@@ -16,33 +16,32 @@ import (
 
 //Result object contains results of match checks.
 type Result struct {
-	Name  bool
-	Regex bool
-	Size  bool
-	Hash  bool
+	name   bool
+	regex  bool
+	size   bool
+	digest bool
 }
 
 // MatchFile attempts to match a file according to the values given in program args.
-func MatchFile(file os.FileInfo, path string) Result {
+func MatchFile(file os.FileInfo, path string, exp *Expected) *Result {
+	var result Result
 	// log.WithField("component", path).Debugln("")
-	regexMatch := false
-	for _, regex := range Regex {
+	for _, regex := range exp.regex {
 		r, _ := regexp.Compile(regex)
 
 		// Despite reassignment, should still be false as long as it doesn't match.
-		if !regexMatch {
-			regexMatch = r.MatchString(file.Name())
+		if !result.digest {
+			result.regex = r.MatchString(file.Name())
 		}
 	}
 
-	nameMatch := false
-	for _, n := range Name {
-		if !nameMatch {
-			nameMatch = file.Name() == n
+	for _, n := range exp.name {
+		if !result.name {
+			result.name = file.Name() == n
 		}
 	}
 
-	sizeMatch := file.Size() == Size
+	result.size = file.Size() == exp.size
 	// Open file for reading
 	fileStream, err := os.Open(path)
 	if err != nil {
@@ -51,7 +50,7 @@ func MatchFile(file os.FileInfo, path string) Result {
 	defer fileStream.Close()
 
 	// Create new hasher, which is a writer interface. Default sha256.
-	var hasher = getHasher(Algorithm)
+	var hasher = getHasher(exp.hash.function)
 	_, err = io.Copy(hasher, fileStream)
 	if err != nil {
 		log.Fatal(err)
@@ -60,19 +59,14 @@ func MatchFile(file os.FileInfo, path string) Result {
 	// Hash and print. Pass nil since
 	// the data is not coming in as a slice argument
 	// but is coming through the writer interface
-	hashMatch := bytes.Equal(hasher.Sum(nil), []byte(Hash))
+	result.digest = bytes.Equal(hasher.Sum(nil), []byte(exp.hash.digest))
 
-	return Result{
-		Name:  nameMatch,
-		Regex: regexMatch,
-		Size:  sizeMatch,
-		Hash:  hashMatch,
-	}
+	return &result
 }
 
 //getHasher returns a new hash.Hash object depending on input string given.
-func getHasher(algorithm string) hash.Hash {
-	switch algorithm {
+func getHasher(function string) hash.Hash {
+	switch function {
 	case "md5":
 		return md5.New()
 	case "sha224":
@@ -100,33 +94,35 @@ func getHasher(algorithm string) hash.Hash {
 	}
 }
 
-func ValidateResult(res Result) bool {
+//ValidateResult compares expected values to the result values.
+//todo: needs to check if more than one has to be valid.
+func ValidateResult(exp *Expected, res *Result) bool {
 	match := false
-	if len(Name) > 0 {
-		match = res.Name
+	if len(exp.name) > 0 {
+		match = res.name
 	}
 
-	if len(Regex) > 0 {
+	if len(exp.regex) > 0 {
 		if !match {
-			match = res.Regex
+			match = res.regex
 		} else {
-			match = match && res.Regex
+			match = match && res.regex
 		}
 	}
 
-	if Size > 0 {
+	if exp.size > 0 {
 		if !match {
-			match = res.Size
+			match = res.size
 		} else {
-			match = match && res.Size
+			match = match && res.size
 		}
 	}
 
-	if len(Hash) > 0 {
+	if len(exp.hash.digest) > 0 {
 		if !match {
-			match = res.Hash
+			match = res.digest
 		} else {
-			match = match && res.Hash
+			match = match && res.digest
 		}
 	}
 

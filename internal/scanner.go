@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	log "github.com/sirupsen/logrus"
+	// log "github.com/sirupsen/logrus"
 
 	"github.com/daan-hoogland/walk"
 )
@@ -20,7 +20,7 @@ type File struct {
 }
 
 type resultList struct {
-	FileMatches []File
+	fileMatches []File
 	sync.RWMutex
 }
 
@@ -29,11 +29,14 @@ var (
 	//Results is a thread safe list containing results of the scanner action.
 	Results resultList
 
+	exp *Expected
+
 	fileQueue = make(chan File, 300)
 )
 
 //StartJobs starts the consumers and producer.
-func StartJobs() {
+func StartJobs(expected *Expected) {
+	exp = expected
 	// log.WithField("component", "producer").Traceln("entering start jobs")
 	consumers := MaxProcs - int(math.Ceil(0.2*float64(MaxProcs)))
 	if !(consumers-1 > 0) {
@@ -57,8 +60,8 @@ func consume(id int) {
 	defer wg.Done()
 	for file := range fileQueue {
 		// log.WithField("component", "new job").Debugln("consumer " + strconv.Itoa(id))
-		res := MatchFile(file.info, file.path)
-		if ValidateResult(res) {
+		res := MatchFile(file.info, file.path, exp)
+		if ValidateResult(exp, res) {
 			addResult(file)
 		}
 	}
@@ -67,7 +70,7 @@ func consume(id int) {
 func addResult(file File) {
 	Results.Lock()
 	defer Results.Unlock()
-	Results.FileMatches = append(Results.FileMatches, file)
+	Results.fileMatches = append(Results.fileMatches, file)
 }
 
 func addFileToQueue(file File) {

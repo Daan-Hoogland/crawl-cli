@@ -18,13 +18,16 @@ Unlike the scan command, the analyse command does not send the results
 to a running web application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		log.WithField("command", "analyse")
-		log.Traceln("executing analyse command")
 		log.Debugln(int(math.Ceil(0.2 * float64(internal.MaxProcs))))
 		start := time.Now()
-		internal.StartJobs()
+		internal.StartJobs(internal.newExpected(internal.Name, internal.Regex, internal.Size, internal.Hash, internal.Algorithm))
 		log.Infoln(time.Since(start))
 		fmt.Printf("%v\n", internal.Results)
 	},
+}
+
+func SetFlagValues() {
+
 }
 
 // init sets the flags for analyseCmd and adds it as a subcommand
