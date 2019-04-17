@@ -22,4 +22,6 @@ func InitLog(cmd *cobra.Command, debug bool, develop bool, verbose bool) {
 		HideKeys:    true,
 		FieldsOrder: []string{"command", "component", "category", "subcategory"},
 	})
+
+	log.WithField("command", cmd.Name())
 }

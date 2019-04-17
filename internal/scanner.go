@@ -17,6 +17,7 @@ type File struct {
 	info os.FileInfo
 	path string
 	err  error
+	submitted bool
 }
 
 type resultList struct {

@@ -1,10 +1,11 @@
 package cmd
 
 import (
-	"fmt"
 	"math"
+	"os"
 	"time"
 
+	"github.com/briandowns/spinner"
 	flags "github.com/daan-hoogland/crawl/cmd/flags"
 
 	internal "github.com/daan-hoogland/crawl/internal"
@@ -19,12 +20,20 @@ var analyseCmd = &cobra.Command{
 Unlike the scan command, the analyse command does not send the results
 to a running web application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		log.WithField("command", "analyse")
-		log.Debugln(int(math.Ceil(0.2 * float64(flags.MaxProcs))))
+		lgr := log.WithField("command", "analyse")
+		lgr.Debugln(int(math.Ceil(0.2 * float64(flags.MaxProcs))))
 		start := time.Now()
+		s := spinner.New([]string{"\\", "|", "/", "-"}, 150*time.Millisecond)
+		s.Suffix = "  Crawling files..."
+		s.Writer = os.Stderr
+		s.Start()
 		internal.StartJobs(internal.NewExpected(flags.Name, flags.Regex, flags.Size, flags.Hash, flags.Algorithm), flags.MaxProcs, flags.Directory)
-		log.Infoln(time.Since(start))
-		fmt.Printf("%v\n", internal.Results)
+		s.Stop()
+		executionTime := time.Since(start)
+		data := internal.ResultTo2DSlice(&internal.Results)
+		table := internal.GenerateTable(data)
+		table.Render()
+		lgr.WithField("component", "execution time").Infoln(executionTime.String())
 	},
 }
 
