@@ -44,9 +44,9 @@ func Test_ValidateResultName(t *testing.T) {
 		digest: false,
 	}
 
-	exp = newExpected([]string{"test"}, []string{}, 0, "", "")
+	exp = NewExpected([]string{"test"}, []string{}, 0, "", "")
 
-	result := ValidateResult(exp, &res)
+	result := res.ValidateResult(exp)
 	if result != true {
 		t.Errorf("valudate name = %t want %t", result, true)
 	}
@@ -60,9 +60,9 @@ func Test_ValidateResultRegex(t *testing.T) {
 		digest: false,
 	}
 
-	exp = newExpected([]string{}, []string{"test"}, 0, "", "")
+	exp = NewExpected([]string{}, []string{"test"}, 0, "", "")
 
-	result := ValidateResult(exp, &res)
+	result := res.ValidateResult(exp)
 	if result != true {
 		t.Errorf("validate regex = %t want %t", result, true)
 	}
@@ -76,9 +76,9 @@ func Test_ValidateResultSize(t *testing.T) {
 		digest: false,
 	}
 
-	exp = newExpected([]string{}, []string{}, 500, "", "")
+	exp = NewExpected([]string{}, []string{}, 500, "", "")
 
-	result := ValidateResult(exp, &res)
+	result := res.ValidateResult(exp)
 	if result != true {
 		t.Errorf("validate size = %t want %t", result, true)
 	}
@@ -92,9 +92,9 @@ func Test_ValidateResultDigest(t *testing.T) {
 		digest: true,
 	}
 
-	exp = newExpected([]string{}, []string{""}, 0, "16e8296ff0f34df33f8ce96610606173", "md5")
+	exp = NewExpected([]string{}, []string{""}, 0, "16e8296ff0f34df33f8ce96610606173", "md5")
 
-	result := ValidateResult(exp, &res)
+	result := res.ValidateResult(exp)
 	if result != true {
 		t.Errorf("validate digest = %t want %t", result, true)
 	}
@@ -108,9 +108,9 @@ func Test_ValidateResultFail(t *testing.T) {
 		digest: false,
 	}
 
-	exp = newExpected([]string{"fdff"}, []string{}, 0, "", "")
+	exp = NewExpected([]string{"fdff"}, []string{}, 0, "", "")
 
-	result := ValidateResult(exp, &res)
+	result := res.ValidateResult(exp)
 	if false != result {
 		t.Errorf("validate name and size = %t want %t", result, true)
 	}
@@ -124,9 +124,9 @@ func Test_ValidateResult(t *testing.T) {
 		digest: true,
 	}
 
-	exp = newExpected([]string{"test1"}, []string{"test2"}, 500, "16e8296ff0f34df33f8ce96610606173", "md5")
+	exp = NewExpected([]string{"test1"}, []string{"test2"}, 500, "16e8296ff0f34df33f8ce96610606173", "md5")
 
-	result := ValidateResult(exp, &res)
+	result := res.ValidateResult(exp)
 	if true != result {
 		t.Errorf("validate all = %t want %t", result, true)
 	}
