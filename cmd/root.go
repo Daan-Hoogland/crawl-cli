@@ -13,7 +13,7 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:     "crawl",
-	Version: "0.1 ALPHA",
+	Version: "0.2",
 	Short:   "Crawl is a tool to search through a filesystem or services.",
 	Long: `A tool to be combined with the web application with the same name.
 The application searches for a file or directory with a name, hash
