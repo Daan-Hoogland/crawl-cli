@@ -7,12 +7,12 @@ import (
 )
 
 // InitLog initializes the log interface with the correct logging level.
-func InitLog(cmd *cobra.Command) {
-	if Debug {
+func InitLog(cmd *cobra.Command, debug bool, develop bool, verbose bool) {
+	if debug {
 		log.SetLevel(log.DebugLevel)
-	} else if Develop {
+	} else if develop {
 		log.SetLevel(log.TraceLevel)
-	} else if Verbose {
+	} else if verbose {
 		log.SetLevel(log.InfoLevel)
 	} else {
 		log.SetLevel(log.WarnLevel)
@@ -22,17 +22,4 @@ func InitLog(cmd *cobra.Command) {
 		HideKeys:    true,
 		FieldsOrder: []string{"command", "component", "category", "subcategory"},
 	})
-}
-
-// LogFields returns a Fields object to log the flag fields.
-func LogFields() log.Fields {
-	return log.Fields{
-		"name":      Name,
-		"size":      Size,
-		"hash":      Hash,
-		"algorithm": Algorithm,
-		"external":  External,
-		"port":      Port,
-		"verbose":   Verbose,
-	}
 }

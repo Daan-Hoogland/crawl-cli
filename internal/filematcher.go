@@ -96,7 +96,7 @@ func getHasher(function string) hash.Hash {
 
 //ValidateResult compares expected values to the result values.
 //todo: needs to check if more than one has to be valid.
-func ValidateResult(exp *Expected, res *Result) bool {
+func (res *Result) ValidateResult(exp *Expected) bool {
 	match := false
 	if len(exp.name) > 0 {
 		match = res.name

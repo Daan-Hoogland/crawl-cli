@@ -35,10 +35,10 @@ var (
 )
 
 //StartJobs starts the consumers and producer.
-func StartJobs(expected *Expected) {
+func StartJobs(expected *Expected, maxProcs int, rootDir string) {
 	exp = expected
-	// log.WithField("component", "producer").Traceln("entering start jobs")
-	consumers := MaxProcs - int(math.Ceil(0.2*float64(MaxProcs)))
+	procs := calcProcs(maxProcs)
+	consumers := procs[1]
 	if !(consumers-1 > 0) {
 		consumers = 1
 	}
@@ -49,9 +49,9 @@ func StartJobs(expected *Expected) {
 		go consume(i)
 	}
 
-	runtime.GOMAXPROCS(MaxProcs)
+	runtime.GOMAXPROCS(maxProcs)
 	wg.Add(1)
-	go scan(Directory)
+	go scan(rootDir, procs[0])
 
 	wg.Wait()
 }
@@ -61,7 +61,7 @@ func consume(id int) {
 	for file := range fileQueue {
 		// log.WithField("component", "new job").Debugln("consumer " + strconv.Itoa(id))
 		res := MatchFile(file.info, file.path, exp)
-		if ValidateResult(exp, res) {
+		if res.ValidateResult(exp) {
 			addResult(file)
 		}
 	}
@@ -87,9 +87,9 @@ func addFileToQueue(file File) {
 }
 
 //Scan starts the filesystem scanning
-func scan(directory string) {
+func scan(directory string, maxProcs int) {
 	defer wg.Done()
-	err := walk.CustomWalk(directory, visit, int(math.Ceil(0.2*float64(MaxProcs))))
+	err := walk.CustomWalk(directory, visit, int(math.Ceil(0.2*float64(maxProcs))))
 	close(fileQueue)
 	if err != nil {
 		//throw big error
@@ -105,4 +105,10 @@ func visit(path string, info os.FileInfo, err error) error {
 		})
 	}
 	return nil
+}
+
+func calcProcs(maxProcs int) []int {
+	walkProcs := int(math.Ceil(0.2 * float64(maxProcs)))
+	analyseProcs := maxProcs - walkProcs
+	return []int{walkProcs, analyseProcs}
 }

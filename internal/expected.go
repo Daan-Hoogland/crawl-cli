@@ -13,7 +13,7 @@ type combinedHash struct {
 	function string
 }
 
-func newExpected(name []string, regex []string, size int64, digest string, function string) *Expected {
+func NewExpected(name []string, regex []string, size int64, digest string, function string) *Expected {
 	return &Expected{
 		name:  name,
 		regex: regex,

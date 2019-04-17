@@ -5,7 +5,8 @@ import (
 	"os"
 
 	internal "github.com/daan-hoogland/crawl/internal"
-	validate "github.com/daan-hoogland/crawl/internal/validation"
+
+	flags "github.com/daan-hoogland/crawl/cmd/flags"
 
 	"github.com/spf13/cobra"
 )
@@ -19,8 +20,8 @@ The application searches for a file or directory with a name, hash
 or size and will report any findings back to the web application.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		// initialize logging before every single command
-		internal.InitLog(cmd)
-		error := validate.CheckRequiredFlags(cmd)
+		internal.InitLog(cmd, flags.Debug, flags.Develop, flags.Verbose)
+		error := flags.CheckRequiredFlags(cmd)
 		if (error) != nil {
 			fmt.Println(error)
 			cmd.Usage()
@@ -29,9 +30,12 @@ or size and will report any findings back to the web application.`,
 	},
 }
 
+func init() {
+	flags.InitFlags(rootCmd)
+}
+
 // Execute initializes the Cobra commands.
 func Execute() {
-	internal.InitFlags(rootCmd)
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
