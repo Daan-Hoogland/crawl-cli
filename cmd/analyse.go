@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/briandowns/spinner"
-	flags "github.com/daan-hoogland/crawl/cmd/flags"
+	flags "github.com/daan-hoogland/crawl-cli/cmd/flags"
 
-	internal "github.com/daan-hoogland/crawl/internal"
+	internal "github.com/daan-hoogland/crawl-cli/internal"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )

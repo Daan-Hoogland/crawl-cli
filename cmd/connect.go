@@ -3,9 +3,9 @@ package cmd
 import (
 	"net/http"
 
-	pkg "github.com/daan-hoogland/crawl/pkg"
+	pkg "github.com/daan-hoogland/crawl-cli/pkg"
 
-	flags "github.com/daan-hoogland/crawl/cmd/flags"
+	flags "github.com/daan-hoogland/crawl-cli/cmd/flags"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"

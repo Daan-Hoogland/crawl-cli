@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	flags "github.com/daan-hoogland/crawl/cmd/flags"
+	flags "github.com/daan-hoogland/crawl-cli/cmd/flags"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )

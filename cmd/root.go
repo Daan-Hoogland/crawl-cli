@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	internal "github.com/daan-hoogland/crawl/internal"
+	internal "github.com/daan-hoogland/crawl-cli/internal"
 
-	flags "github.com/daan-hoogland/crawl/cmd/flags"
+	flags "github.com/daan-hoogland/crawl-cli/cmd/flags"
 
 	"github.com/spf13/cobra"
 )
