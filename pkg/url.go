@@ -26,7 +26,7 @@ func GenerateURL(ip string, port int, parameters map[string]string, ssl bool, ex
 		for key, val := range parameters {
 			params.Add(key, val)
 		}
-		urlString = urlString + params.Encode()
+		urlString = urlString + "?" + params.Encode()
 	}
 
 	return urlString
