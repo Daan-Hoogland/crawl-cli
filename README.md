@@ -33,13 +33,13 @@ This means that the application doesn't have sufficient permissions to be execut
 - [ ] add application to AUR.
 
 #### Windows 32/64bit
-Move the `crawl-cli` executable to a location of your choice. The executable itself can be found in `build/windows/32/` or `build/windows/64/` depending on which version your Windows supports.
+Move the `crawl` executable to a location of your choice. The executable itself can be found in `build/windows/32/` or `build/windows/64/` depending on which version your Windows supports.
 
 In order to access the `crawl` application from `cmd.exe` or PowerShell, the directory which you have chosen needs to be added to your user's path variable. How to do this depends on your version of Windows, but there are plenty of [examples](https://stackoverflow.com/a/9546345)  available online to show you how to.
 
 
 ### Usage
-There are 4 general actions. These can be accessed by typing `crawl-cli <action> <flags>`. The  actions and their flags are briefly described below.
+There are 4 general actions. These can be accessed by typing `crawl <action> <flags>`. The  actions and their flags are briefly described below.
 
 #### help
 Shows the list of actions along with their flags. Can be executed on an action by adding the `-h` flag. Example: `crawl help -h` will output the following:
