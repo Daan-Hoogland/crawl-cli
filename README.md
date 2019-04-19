@@ -9,7 +9,7 @@ This tool is designed to scan a file system for files or running processes match
 ## Getting started
 The application can be compiled from the source or downloaded from the [release page](https://github.com/Daan-Hoogland/crawl-cli/releases). The latest release can be found in the shield at the top. 
 
-There ~~are~~ will be prebuilt binaries available for:
+There are prebuilt binaries available for:
 - Linux (64 bit)
 - OSX (64 bit)
 - Windows (32 bit and 64 bit)
