@@ -13,6 +13,7 @@ type combinedHash struct {
 	function string
 }
 
+//NewExpected creates a new struct of type Expected
 func NewExpected(name []string, regex []string, size int64, digest string, function string) *Expected {
 	return &Expected{
 		name:  name,
@@ -22,6 +23,7 @@ func NewExpected(name []string, regex []string, size int64, digest string, funct
 	}
 }
 
+//newHash generates a new struct of type combinedHash
 func newHash(digest string, function string) *combinedHash {
 	return &combinedHash{
 		digest:   digest,

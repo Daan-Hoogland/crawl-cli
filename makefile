@@ -1,8 +1,8 @@
-.PHONY: all golint vet fmt test coverage scan build linux osx windows source clean
+.PHONY: all fmt test coverage build linux osx windows windows32 source clean
 BUILD_HASH=$(shell git rev-parse HEAD)
 BUILD_VERSION=0.3
 
-all: clean get test fmt coverage build source
+all: clean get test fmt coverage build
 
 clean:
 	@-rm -rf build/

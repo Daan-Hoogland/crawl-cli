@@ -13,9 +13,10 @@ type sortSlice2d [][]string
 func (c sortSlice2d) Len() int      { return len(c) }
 func (c sortSlice2d) Swap(i, j int) { c[i], c[j] = c[j], c[i] }
 
-// Compare strings by first key of the sub-slice
+//Less compare strings by first key of the sub-slice
 func (c sortSlice2d) Less(i, j int) bool { return strings.Compare(c[i][0], c[j][0]) == -1 }
 
+//ResultTo2DSlice converts a resultList to a 2d slice to be used in table generation.
 func ResultTo2DSlice(res *resultList) [][]string {
 	res.Lock()
 	defer res.Unlock()
@@ -37,6 +38,7 @@ func ResultTo2DSlice(res *resultList) [][]string {
 	return data
 }
 
+//GenerateTable generates a table with given data
 func GenerateTable(data [][]string) *tablewriter.Table {
 	table := tablewriter.NewWriter(os.Stderr)
 	table.SetHeader([]string{"Name", "Path", "Submitted"})

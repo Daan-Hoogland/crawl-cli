@@ -17,7 +17,7 @@ There ~~are~~ will be prebuilt binaries available for:
 ### Building
 Building the project from source will require a valid go installation. Instructions for your OS will be widely available on the web.
 
-Included in the repository is a `makefile`. This file includes all actions that need to be taken to build the application. Afterwards, the generated binary can be found in `/build/{os}`. 
+Included in the repository is a `makefile`. This file includes all actions that need to be taken to build the application. The application itself can be build using the command `make build`. This compiles a binary for all OS versions, along with the source. Afterwards, the generated binary can be found in `/build/VERSION/OS`. If you don't want to build all binaries, a specific OS can be selected by executing `build <TARGET>` with the target argument being linux, osx, windows, windows32 or source.
 
 ### Installing
 #### Linux & OSX
@@ -138,7 +138,8 @@ Global Flags:
 ```
 
 ## Todo
-- [ ] create `makefile`
+- [x] create `makefile`
+- [ ] fix hash not matching
 - [ ] unit test fs operations
 - [ ] configure jenkins to automatically build and test
 - [ ] allow scanning of running processes

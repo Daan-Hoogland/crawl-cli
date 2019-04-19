@@ -14,8 +14,9 @@
 # Build package
 crawl
 crawl-cli
+build/
 
 # IDE specific folders & files
 .vscode/
 debug
-build/
+
