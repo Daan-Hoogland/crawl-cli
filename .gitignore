@@ -18,3 +18,4 @@ crawl-cli
 # IDE specific folders & files
 .vscode/
 debug
+build/

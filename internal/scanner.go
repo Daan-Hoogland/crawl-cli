@@ -7,16 +7,14 @@ import (
 	"sync"
 	"time"
 
-	// log "github.com/sirupsen/logrus"
-
 	"github.com/daan-hoogland/walk"
 )
 
 //File struct used to store file information.
 type File struct {
-	info os.FileInfo
-	path string
-	err  error
+	info      os.FileInfo
+	path      string
+	err       error
 	submitted bool
 }
 
