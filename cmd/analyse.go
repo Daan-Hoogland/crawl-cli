@@ -15,10 +15,10 @@ import (
 
 var analyseCmd = &cobra.Command{
 	Use:   "analyse",
-	Short: "The analyse command scans the filesystem for files or running services.",
-	Long: `The analyse command scans the filesystem for files or running services.
+	Short: "The analyse command scans the filesystem for files or running processes.",
+	Long: `The analyse command scans the filesystem for files or running processes.
 Unlike the scan command, the analyse command does not send the results
-to a running web application.`,
+to a connected web server.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		lgr := log.WithField("command", "analyse")
 		lgr.Debugln(int(math.Ceil(0.2 * float64(flags.MaxProcs))))

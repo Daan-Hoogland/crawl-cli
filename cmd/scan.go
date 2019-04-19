@@ -8,8 +8,8 @@ import (
 
 var scanCmd = &cobra.Command{
 	Use:   "scan",
-	Short: "The scan command scans the filesystem for files or running services.",
-	Long: `The scan commands scans the filesystem for files or running applications
+	Short: "The scan command scans the filesystem for files or running processes.",
+	Long: `The scan commands scans the filesystem for files or running processes
 and compares them to the given input. Any matches will be sent
 to the connected web application.`,
 	SuggestFor: []string{"start"},
