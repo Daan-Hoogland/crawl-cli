@@ -1,11 +1,10 @@
-package validation
+package flags
 
 import (
 	"errors"
 	"net"
 	"regexp"
 
-	internal "github.com/daan-hoogland/crawl/internal"
 	lgr "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -47,13 +46,13 @@ func validateScan() error {
 func validateAnalyse() error {
 	log.Traceln("entering validateAnalysis")
 	isNameEmpty := false
-	if len(internal.Name) == 0 {
+	if len(Name) == 0 {
 		isNameEmpty = true
 	}
 	log.WithFields(lgr.Fields{"category": "name", "state": isNameEmpty}).Debugln("name check")
 
-	if len(internal.Regex) > 0 {
-		for _, v := range internal.Regex {
+	if len(Regex) > 0 {
+		for _, v := range Regex {
 			_, err := regexp.Compile(v)
 			if err != nil {
 				log.WithFields(lgr.Fields{"category": "regex", "state": v}).Fatalln("unable to compile regex")
@@ -62,14 +61,14 @@ func validateAnalyse() error {
 	}
 
 	isSizeZero := false
-	if internal.Size == 0 {
+	if Size == 0 {
 		isSizeZero = true
 	}
 	log.WithFields(lgr.Fields{"category": "size", "state": isSizeZero}).Debugln("size check")
 
-	isHashEmpty := isNotEmpty(internal.Hash)
+	isHashEmpty := isNotEmpty(Hash)
 	log.WithFields(lgr.Fields{"category": "hash", "state": isHashEmpty}).Debugln("hash check")
-	isAlgorithmEmpty := isNotEmpty(internal.Algorithm)
+	isAlgorithmEmpty := isNotEmpty(Algorithm)
 	log.WithFields(lgr.Fields{"category": "hash", "subcategory": "algorithm", "state": isAlgorithmEmpty}).Debugln("algorithm check")
 
 	isHashFlagsInvalid := isHashEmpty && isAlgorithmEmpty
@@ -87,7 +86,7 @@ func validateAnalyse() error {
 func validateConnect() error {
 	log.Traceln("entering validateConnect")
 
-	if nil == net.ParseIP(internal.External) {
+	if nil == net.ParseIP(External) {
 		log.Traceln("leaving validateConnect with error")
 		return errors.New("Error: flag \"target\" does not compile to a valid IP address")
 	}

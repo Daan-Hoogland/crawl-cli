@@ -13,6 +13,7 @@
 
 # Build package
 crawl
+crawl-cli
 
 # IDE specific folders & files
 .vscode/

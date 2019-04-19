@@ -1,4 +1,4 @@
-package internal
+package flags
 
 import (
 	"github.com/spf13/cobra"
@@ -64,7 +64,7 @@ func fileFlags(c *cobra.Command) {
 	c.Flags().StringSliceVarP(&Name, "name", "n", nil, "name(s) of files to search for")
 	c.Flags().StringVarP(&Directory, "directory", "d", "", "directory the application starts in")
 	c.MarkFlagRequired("directory")
-	c.PersistentFlags().IntVarP(&MaxProcs, "threads", "T", 2, "number of processes to spawn.")
+	c.Flags().IntVarP(&MaxProcs, "threads", "T", 2, "number of processes to spawn.")
 }
 
 // rootFlags sets the flags for the root command. These are available on every other command.

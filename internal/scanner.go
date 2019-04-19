@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	log "github.com/sirupsen/logrus"
+	// log "github.com/sirupsen/logrus"
 
 	"github.com/daan-hoogland/walk"
 )
@@ -17,10 +17,11 @@ type File struct {
 	info os.FileInfo
 	path string
 	err  error
+	submitted bool
 }
 
 type resultList struct {
-	FileMatches []File
+	fileMatches []File
 	sync.RWMutex
 }
 
@@ -29,13 +30,16 @@ var (
 	//Results is a thread safe list containing results of the scanner action.
 	Results resultList
 
+	exp *Expected
+
 	fileQueue = make(chan File, 300)
 )
 
 //StartJobs starts the consumers and producer.
-func StartJobs() {
-	// log.WithField("component", "producer").Traceln("entering start jobs")
-	consumers := MaxProcs - int(math.Ceil(0.2*float64(MaxProcs)))
+func StartJobs(expected *Expected, maxProcs int, rootDir string) {
+	exp = expected
+	procs := calcProcs(maxProcs)
+	consumers := procs[1]
 	if !(consumers-1 > 0) {
 		consumers = 1
 	}
@@ -46,9 +50,9 @@ func StartJobs() {
 		go consume(i)
 	}
 
-	runtime.GOMAXPROCS(MaxProcs)
+	runtime.GOMAXPROCS(maxProcs)
 	wg.Add(1)
-	go scan(Directory)
+	go scan(rootDir, procs[0])
 
 	wg.Wait()
 }
@@ -57,8 +61,8 @@ func consume(id int) {
 	defer wg.Done()
 	for file := range fileQueue {
 		// log.WithField("component", "new job").Debugln("consumer " + strconv.Itoa(id))
-		res := MatchFile(file.info, file.path)
-		if ValidateResult(res) {
+		res := MatchFile(file.info, file.path, exp)
+		if res.ValidateResult(exp) {
 			addResult(file)
 		}
 	}
@@ -67,7 +71,7 @@ func consume(id int) {
 func addResult(file File) {
 	Results.Lock()
 	defer Results.Unlock()
-	Results.FileMatches = append(Results.FileMatches, file)
+	Results.fileMatches = append(Results.fileMatches, file)
 }
 
 func addFileToQueue(file File) {
@@ -84,9 +88,9 @@ func addFileToQueue(file File) {
 }
 
 //Scan starts the filesystem scanning
-func scan(directory string) {
+func scan(directory string, maxProcs int) {
 	defer wg.Done()
-	err := walk.CustomWalk(directory, visit, int(math.Ceil(0.2*float64(MaxProcs))))
+	err := walk.CustomWalk(directory, visit, int(math.Ceil(0.2*float64(maxProcs))))
 	close(fileQueue)
 	if err != nil {
 		//throw big error
@@ -102,4 +106,10 @@ func visit(path string, info os.FileInfo, err error) error {
 		})
 	}
 	return nil
+}
+
+func calcProcs(maxProcs int) []int {
+	walkProcs := int(math.Ceil(0.2 * float64(maxProcs)))
+	analyseProcs := maxProcs - walkProcs
+	return []int{walkProcs, analyseProcs}
 }
