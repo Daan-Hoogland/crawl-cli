@@ -1,14 +1,15 @@
 package internal
 
 import (
-	"bytes"
 	"crypto/md5"
 	"crypto/sha256"
 	"crypto/sha512"
+	"encoding/hex"
 	"hash"
 	"io"
 	"os"
 	"regexp"
+	"strings"
 
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/sha3"
@@ -42,6 +43,7 @@ func MatchFile(file os.FileInfo, path string, exp *Expected) *Result {
 	}
 
 	result.size = file.Size() == exp.size
+
 	// Open file for reading
 	fileStream, err := os.Open(path)
 	if err != nil {
@@ -51,22 +53,27 @@ func MatchFile(file os.FileInfo, path string, exp *Expected) *Result {
 
 	// Create new hasher, which is a writer interface. Default sha256.
 	var hasher = getHasher(exp.hash.function)
+	log.WithField("component", "func").Debugln(exp.hash.function)
 	_, err = io.Copy(hasher, fileStream)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	log.WithField("component", "res").Debugln(hex.EncodeToString(hasher.Sum(nil)))
+	log.WithField("component", "exp").Debugln(exp.hash.digest)
+
 	// Hash and print. Pass nil since
 	// the data is not coming in as a slice argument
 	// but is coming through the writer interface
-	result.digest = bytes.Equal(hasher.Sum(nil), []byte(exp.hash.digest))
+	// result.digest = bytes.Equal(hasher.Sum(nil), []byte(exp.hash.digest))
+	result.digest = hex.EncodeToString(hasher.Sum(nil)) == exp.hash.digest
 
 	return &result
 }
 
 //getHasher returns a new hash.Hash object depending on input string given.
 func getHasher(function string) hash.Hash {
-	switch function {
+	switch strings.ToLower(function) {
 	case "md5":
 		return md5.New()
 	case "sha224":
