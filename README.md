@@ -1,5 +1,5 @@
 # Crawl CLI
-[![Go Report Card](https://goreportcard.com/badge/github.com/Daan-Hoogland/crawl-cli)](go-report-card)  ![Latest Release Shield](https://img.shields.io/github/release/daan-hoogland/crawl-cli.svg  "latest-release") ![License](https://img.shields.io/github/license/daan-hoogland/crawl-cli.svg  "license")
+[![Go Report Card](https://goreportcard.com/badge/github.com/Daan-Hoogland/crawl-cli)](go-report-card) ![Latest Pre-release Shield](https://img.shields.io/github/release-pre/daan-hoogland/crawl-cli.svg?label=pre-release) ![Latest Release Shield](https://img.shields.io/github/release/daan-hoogland/crawl-cli.svg  "latest-release") ![License](https://img.shields.io/github/license/daan-hoogland/crawl-cli.svg  "license")
 
 **This application is a work in progress.**
 It's mostly just a tool for me to work on while learning Go. Any functional suggestions, tips or pull requests are more than welcome.
